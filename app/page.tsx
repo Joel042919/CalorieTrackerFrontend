@@ -318,7 +318,7 @@ const Dashboard: React.FC<DashboardProps> = ({ macros, dailyTrack, setDailyTrack
     {/* Centro: Gráfico Circular */}
     <div className="relative w-56 h-56 flex justify-center items-center">
       {/* SVG del Anillo */}
-      <svg className="absolute w-full h-full transform -rotate-90 filter drop-shadow-[0_0_8px_rgba(149,18,44,0.3)]">
+      <svg viewBox="0 0 224 224" className="absolute w-full h-full transform -rotate-90 filter drop-shadow-[0_0_8px_rgba(149,18,44,0.3)]">
         {/* Círculo de Fondo (Track) */}
         <circle 
           cx="112" cy="112" r="95" 
