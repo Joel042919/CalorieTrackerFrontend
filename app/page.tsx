@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, ChevronRight, Plus, Minus, Droplet, Activity, User, Target, X, ImageIcon, Loader2 } from 'lucide-react';
 
 // --- CONFIGURACIÓN BASE DE LA API ---
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'https://calorietrackerbackend-m0z5.onrender.com/api';
 
 // ==========================================
 // INTERFACES (TIPADOS PARA TYPESCRIPT)
