@@ -467,7 +467,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
   };
 
   const handleAnalyze = async () => {
-    if (!file) return;
+    if (!file || isUploading) return;
     setIsUploading(true);
 
     const formData = new FormData();
@@ -478,6 +478,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
       const res = await fetch(`${API_URL}/track`, {
         method: 'POST',
         body: formData,
+        keepalive: true, // Para evitar timeouts en análisis largos
       });
 
       if (!res.ok) throw new Error('Error IA');
@@ -487,6 +488,8 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
 
     } catch (error) {
       console.warn("Error al analizar",error);
+    }finally{
+      setIsUploading(false);
     }
   };
 
