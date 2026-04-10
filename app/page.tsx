@@ -452,27 +452,36 @@ interface UploadModalProps {
 }
 
 const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  //const [file, setFile] = useState<File | null>(null);
+  //const [preview, setPreview] = useState<string | null>(null);
   const [description, setDescription] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [timeMeal, setTimeMeal] = useState<string>('Breakfast');
+  const mealOptions = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+  //const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /*const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) {
       setFile(selected);
       setPreview(URL.createObjectURL(selected));
     }
-  };
+  };*/
 
   const handleAnalyze = async () => {
-    if (!file || isUploading) return;
+    //if (!file ||isUploading) return;
     setIsUploading(true);
 
     const formData = new FormData();
-    formData.append('image', file);
+    //formData.append('image', file);
     formData.append('description', description);
+    formData.append('timeMeal', timeMeal);
+
+    if(description === ''){
+      alert("Por favor, ingresa una descripción de tu comida.");
+      setIsUploading(false);
+      return;
+    }
 
     try {
       const res = await fetch(`${API_URL}/track`, {
@@ -502,7 +511,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
           <button onClick={onClose} className="text-[#DBE0E1] hover:text-white"><X size={24} /></button>
         </div>
 
-        <div 
+        {/*<div 
           onClick={() => fileInputRef.current?.click()}
           className="w-full h-48 bg-[#100C08] rounded-2xl border-2 border-dashed border-[#CA3F16]/50 flex flex-col items-center justify-center text-[#DBE0E1] cursor-pointer overflow-hidden relative group"
         >
@@ -515,13 +524,33 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
             </>
           )}
           <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" capture="environment" className="hidden" />
+        </div>*/}
+
+        <div className='mt-4'>
+          <label className="text-sm text-[#DBE0E1] mb-2 block">Meal</label>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {mealOptions.map((meal) => (
+              <button
+                key={meal}
+                type="button" 
+                onClick={() => setTimeMeal(meal)}
+                className={`py-2 px-4 rounded-xl border transition-all duration-300 ${
+                  timeMeal === meal
+                    ? 'bg-[#FF9408] border-[#FF9408] text-[#100C08] font-medium shadow-[0_0_10px_rgba(255,148,8,0.3)]' 
+                    : 'bg-[#100C08] border-[#CA3F16]/30 text-[#F3F4F5] hover:border-[#FF9408]/60'
+                }`}
+              >
+                {meal}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-4">
-          <label className="text-sm text-[#DBE0E1] mb-2 block">Descripción (Opcional pero ayuda a la IA)</label>
+          <label className="text-sm text-[#DBE0E1] mb-2 block">Descripción</label>
           <textarea 
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value.trim())}
             placeholder="Ej. Batido de proteínas con leche de almendras y plátano..."
             className="w-full bg-[#100C08] border border-[#CA3F16]/30 rounded-xl p-3 focus:border-[#FF9408] outline-none text-[#F3F4F5] resize-none h-24"
           />
@@ -529,7 +558,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
 
         <button 
           onClick={handleAnalyze}
-          disabled={!file || isUploading}
+          disabled={isUploading}
           className="w-full mt-6 py-4 rounded-2xl font-bold text-white bg-linear-to-r from-[#FF9408] to-[#95122C] disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isUploading ? <><Loader2 className="animate-spin" /> Analizando...</> : 'Analizar e Insertar'}
